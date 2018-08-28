@@ -1,0 +1,22 @@
+
+<%= search_form_for(@search, url:shoes_index_path) do |f| %>
+  
+  <%= f.label "足幅サイズ" %>
+  <%= f.collection_radio_buttons :size_id_eq, @sizes, :id, :size_name %>
+　
+  
+  <div class="actions"><%= f.submit "検索" %></div>
+<% end %>
+
+<% if @result %>
+<h3>検索結果</h3>
+<% @result.each do |shoe| %>
+    <%= shoe.name %><br>
+    <%= shoe.size_id %><br>
+    <%= image_tag shoe.pic, width:'10%' %><br>
+<% end %>
+<% end %>
+
+<% if @result.nil? %>
+<h3>ありません</h3>
+<% end %>
