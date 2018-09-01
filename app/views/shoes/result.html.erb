@@ -1,3 +1,30 @@
-<% @kutu.each do |k| %>
-<%= image_tag k.pic %>
+<body>
+<div class="container">
+<% if @result %>
+<h3>検索結果</h3>
+
+<% @result.each do |shoe| %>
+    <div class="flex">
+      <%= image_tag shoe.pic, width:'200px', height:'200px' %>
+      <p>【名前】<br>
+      <%= shoe.name %><br>
+      【サイズ】:
+      <% if shoe.size_id.present? %>
+        <% s = shoe.size %>
+        <%= s.size_name %>
+      <% else %>
+        該当なし
+      <% end %>
+      </p>
+    </div>
 <% end %>
+
+
+<% elsif @result.nil? %>
+<h3>ありません</h3>
+<% end %>
+
+<%= paginate(@result) %>
+
+</div>
+</body>

@@ -1,4 +1,8 @@
 Rails.application.routes.draw do
-  get 'shoes/index' => 'shoes#index'
-  get 'shoes/index/result' => 'shoes#result'
+  # post 'shoes/index' => 'shoes#result'
+  # get 'shoes/index' => 'shoes#index'
+  
+  resources :shoes 
+  
+  root to: 'shoes#index'
 end

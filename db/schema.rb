@@ -11,22 +11,36 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180827213831) do
+ActiveRecord::Schema.define(version: 20180831232651) do
+
+  create_table "brands", force: :cascade do |t|
+    t.datetime "created_at",             null: false
+    t.datetime "updated_at",             null: false
+    t.string   "brand_name", limit: 255
+  end
 
   create_table "shoes", force: :cascade do |t|
     t.string   "name",       limit: 255
     t.string   "brand_id",   limit: 255
     t.string   "type_id",    limit: 255
     t.string   "size_id",    limit: 255
-    t.datetime "created_at",             null: false
-    t.datetime "updated_at",             null: false
+    t.datetime "created_at",                              null: false
+    t.datetime "updated_at",                              null: false
     t.string   "pic",        limit: 255
+    t.text     "link",       limit: 65535
+    t.decimal  "price",                    precision: 10
   end
 
   create_table "sizes", force: :cascade do |t|
     t.string   "size_name",  limit: 255
     t.datetime "created_at",             null: false
     t.datetime "updated_at",             null: false
+  end
+
+  create_table "types", force: :cascade do |t|
+    t.datetime "created_at",             null: false
+    t.datetime "updated_at",             null: false
+    t.string   "type_name",  limit: 255
   end
 
 end

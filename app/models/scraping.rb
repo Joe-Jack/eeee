@@ -53,21 +53,75 @@ class Scraping
     def self.get_type(all_name, explanation)
         # typeを取得
         if name.match(/ウォーキング/)
-            type = 'ウォーキング'
+            type = 1
         elsif explanation.match(/ウォーキング/)
-            type = 'ウォーキング'
+            type = 1
         end
         if name.match(/カジュアル/)
-            type = 'カジュアル'
+            type = 2
         elsif explanation.match(/カジュアル/)
-            type = 'カジュアル'
+            type = 2
         end
         if name.match(/ランニング/)
-            type = 'ランニング'
+            type = 3
         elsif explanation.match(/ランニング/)
-            type = 'ランニング'
+            type = 3
+        end
+        if name.match(/革靴/)
+            type = 4
+        elsif explanation.match(/革靴/)
+            type = 4
         end
         return type
+    end
+    
+    def self.get_link(all_name)
+        # ショップのリンク取得
+        category_link = all_name.css('div.iviewbtn a')
+        link = category_link.attribute('href').value
+        return link
+    end
+    
+    def self.get_brand(all_name, explanation)
+        # ブランド名の取得
+        if name.match(/アシックス/)
+            brand = 1
+        elsif explanation.match(/アシックス/)
+            brand = 1
+        end
+        if name.match(/アディダス/)
+            brand = 2
+        elsif explanation.match(/アディダス/)
+            brand = 2
+        end
+        if name.match(/ニューバランス/)
+            brand = 3
+        elsif explanation.match(/ニューバランス/)
+            brand = 3
+        end
+        if name.match(/コンバース/)
+            brand = 4
+        elsif explanation.match(/コンバース/)
+            brand = 4
+        end
+        if name.match(/ナイキ/)
+            brand = 5
+        elsif explanation.match(/ナイキ/)
+            brand = 5
+        end
+        if name.match(/アキレス/)
+            brand = 6
+        elsif explanation.match(/アキレス/)
+            brand = 6
+        end
+        return brand
+    end
+    
+    def self.get_price(all_name)
+        # 価格取得
+        str_price = all_name.css('span.yen').value
+        price = str_price.to_i
+        return price
     end
    
    def self.get_content()
@@ -92,15 +146,16 @@ class Scraping
                 image = get_image(all_name)
                 size = get_size(all_name, explanation)
                 type = get_type(all_name, explanation)
+                link = get_link(all_name)
                
-                shoe = Shoe.where(pic: image, name: name, size_id: size, type_id: type).first_or_initialize
+                shoe = Shoe.where(pic: image, name: name, size_id: size, type_id: type, link: link, brand_id: brand, price: price).first_or_initialize
                 shoe.save
                
             end
             next_html = doc.css('.pagenation > ul > li.nextPage a')
             # unless next_html
             page_url = next_html.attribute('href')
-            
+            sleep(1)
             
             
         end

@@ -1,22 +1,44 @@
-
-<%= search_form_for(@search, url:shoes_index_path) do |f| %>
-  
-  <%= f.label "足幅サイズ" %>
-  <%= f.collection_radio_buttons :size_id_eq, @sizes, :id, :size_name %>
-　
-  
-  <div class="actions"><%= f.submit "検索" %></div>
-<% end %>
-
-<% if @result %>
-<h3>検索結果</h3>
-<% @result.each do |shoe| %>
-    <%= shoe.name %><br>
-    <%= shoe.size_id %><br>
-    <%= image_tag shoe.pic, width:'10%' %><br>
-<% end %>
-<% end %>
-
-<% if @result.nil? %>
-<h3>ありません</h3>
-<% end %>
+<body>
+<div class="container">
+  <div id="form">
+    <h2>足幅の合わないあなたへ</h2>
+    <%= search_form_for(@search, url:shoes_path) do |f| %>
+      
+      <%= f.label "足幅サイズ" %>
+      <%= f.collection_select :size_id_eq, @sizes, :id, :size_name, include_blank: '選択してください' %>
+      <%= f.label "シューズタイプ" %>
+      <%= f.collection_select :type_id_eq, @types, :id, :type_name, include_blank: '選択してください' %>
+      <%= f.label "メーカー" %>
+      <%= f.collection_select :brand_id_eq, @brands, :id, :brand_name, include_blank: '選択してください' %>
+      <%= f.label "価格検索" %>
+      <%= f.number_field :price_gteq, class: "form-control",placeholder:"ex:1500" %>～
+      <%= f.number_field :price_lteq, class: "form-control", placeholder:"ex:9800" %>
+      <div class="actions"><%= f.submit "検索", class:"button" %><%= link_to "検索初期化", shoes_path, class:"button" %></div>
+    <% end %>
+  </div>
+  <div id="result">
+    <h3>検索結果</h3>
+    <% if @result.present? %>
+      <% @result.each do |shoe| %>
+          <div class="flex">
+            <%= image_tag shoe.pic, width:'200px', height:'200px' %>
+            <p>【サイズ】:
+            <% if shoe.size_id.present? %>
+              <% s = shoe.size %>
+              <%= s.size_name %>
+            <% else %>
+              該当なし
+            <% end %><br>
+              【名前】<br>
+            <%= shoe.name %><br>
+            <a href=<%=shoe.link %> target="_blank"><button class="btn">ショップへ</button></a>
+            </p>
+          </div>
+      <% end %>
+    <% else %>
+      <h3>ありません</h3>
+    <% end %>
+    <%= paginate(@result) %>
+  </div>
+</div>
+</body>
